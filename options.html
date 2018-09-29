@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head><title>Timetable Notifier Extension Options</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+</head>
+<body class="bg-light">
+<div class="container">
+    <h1><img src="ttalert-48.png" alt="Logo"> Timetable Notifier Extension Options</h1>
+
+    <div id="status" class="alert alert-primary" role="alert" hidden="true">
+    </div>
+
+        <div id="timetableSource" class="form-group">
+            <label class="control-label" for="timetableSourceChooser">
+                Use a google calendar or spreadsheet for timetable data?
+            </label>
+            <select id="timetableSourceChooser" class="form-control">
+                <option value="calendar">Calendar</option>
+                <option value="spreadsheet">Spreadsheet</option>
+            </select>
+        </div>
+
+        <div id="calendar" class="form-group">
+            <label class="control-label" for="calendarChooser">
+                Calendar to use:
+            </label>
+            <select id="calendarChooser" class="form-control" aria-describedby="calendarHelpBlock">
+            </select>
+            <small id="calendarHelpBlock" class="form-text text-muted">
+                Ensure the calendar you want to use is available in <b>My Calendars</b> or <b>Other Calendars</b> in
+                <a href="https://calendar.google.com">Google Calendar</a>. Be careful - this will send and alert for
+                every event in that calendar If you are using Compass for the data source, then
+                make sure you've imported your Compass schedule into Google Calendar using Tools
+                (cog icon in top right corner) -> Sync My Schedule.
+            </small>
+        </div>
+
+        <div id="sheet" class="form-group">
+            <label class="control-label" for="sheetID">
+                Timetable times spreadsheet address:
+            </label>
+            <input type="text" id="sheetID" size="60" class="form-control" aria-describedby="sheetHelpBlock">
+            <small id="sheetHelpBlock" class="form-text text-muted">
+                This must be a sheet in the same format as
+                <a href="https://docs.google.com/spreadsheets/d/142DpQazVjW9rSF_AqobM0NWlelqsxsB5cHSTKovZ_8o">this
+                    sample</a>.
+                Make a copy, and set the lesson names, times, notification options, and term dates to your liking.
+            </small>
+        </div>
+
+        <div id="minutes" class="form-group">
+            <label class="control-label" for="minutesInput">
+                Minutes before lesson end to show notification:
+            </label>
+            <input id="minutesInput" size="2" type="number" class="form-control" aria-describedby="minutesHelpBlock">
+            <small id="minutesHelpBlock" class="form-text text-muted">
+                Note that Compass calendar entries have an end time 1 minute before the actual end time. So if you
+                wanted
+                to have an alert 5 minutes before the end of class and you're using a Compass calendar, then set this to
+                4.
+            </small>
+        </div>
+
+        <button id="save" class="btn btn-primary">Save</button>
+        <button id="reset" class="btn">Reset</button>
+</div>
+<script src="options.js"></script>
+</body>
+</html>
