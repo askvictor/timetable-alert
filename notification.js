@@ -19,21 +19,24 @@ function generateId (len) {
 
 
 function lessonAlarm(alarm) {
-    if(alarm.name.startsWith("daily")){  //ignore the daily housekeeping alarm
-        return;
-    }
-    console.log("Got an alarm!", alarm);
-    if(alarm.scheduledTime < Date.now() - minutesBefore*60000){
-        console.log("alarm from the past; ignoring");
-        return;
-    }
-    var opt = {
-        type: "basic",
-        title: alarm["name"].split(":", 1)[0],  // remove UUID-ish thing in alarm name
-        message: "Class ends soon",
-        iconUrl: "ttalert-48.png"
-    };
-    chrome.notifications.create(opt);
+    chrome.storage.sync.get({"minutes": 5}, function(result) {
+        minutesBefore = result.minutes;
+        if (alarm.name.startsWith("daily")) {  //ignore the daily housekeeping alarm
+            return;
+        }
+        console.log("Got an alarm!", alarm);
+        if (alarm.scheduledTime < Date.now() - minutesBefore * 60000) {
+            console.log("alarm from the past; ignoring");
+            return;
+        }
+        var opt = {
+            type: "basic",
+            title: alarm["name"].split(":", 1)[0],  // remove UUID-ish thing in alarm name
+            message: "Class ends soon",
+            iconUrl: "ttalert-48.png"
+        };
+        chrome.notifications.create(opt);
+    })
 }
 
 function isDuringTerm(terms, date=null){ //date needs to be a Date type
@@ -66,7 +69,6 @@ function setAlarmsFromTimetable(timetable, terms){
                 d.setHours(time[0]);
                 d.setMinutes(time[1]);
                 d.setSeconds(0,0);
-                // TODO - check terms
                 chrome.alarms.create(timetable[i][0], {when: d.getTime() - minutesBefore*60000})
             }
         }
@@ -94,20 +96,25 @@ function dailyAlarm(alarm) {
         //     }
         //})
     }else if(alarm.name == "daily-retry"){
+        console.log("Retrying Daily")
         clearAndUpdate()
     }
 }
 
 function clearAndUpdate() {
+    console.log('clearAndUpdate')
     chrome.alarms.clearAll(function (wasCleared) {
-        createDailyAlarm()
-        updateAlarms()
+        setTimeout(function(){  //delay by one second to prevent race condition
+            createDailyAlarm()
+            updateAlarms()
+        }, 1000)
     })
 }
 
 
 //TODO - split out auth, spreadsheet, and cal into seperate functions
 function updateAlarms(){
+    console.log("updateAlarms")
     // update times from sheet/cal
     try {
         chrome.identity.getAuthToken({interactive: true}, function (token) {
@@ -164,9 +171,12 @@ function updateAlarms(){
                         })
                         break
                     case 'calendar':
-                        chrome.storage.sync.get(['calendar'], function(result){
+                        chrome.storage.sync.get(['calendar', 'minutes'], function(result){
                             if(result.calendar){
-                                GoogleCal = result.calendar
+                                GoogleCal = result.calendar;
+                            }
+                            if(result.minutes){
+                                minutesBefore = result.minutes;
                             }
                             let now = new Date();
                             let tomorrow = new Date();
@@ -176,19 +186,19 @@ function updateAlarms(){
                                 .then(function (data) {
                                     if(data && data['items']) {
                                         data['items'].forEach(function (lesson) {
-                                            var d = new Date(lesson['end']['dateTime'])
-                                            d.setMinutes(d.getMinutes() + 1 - 5)  //TODO - why doesn't this work with minutesBefore?
-                                            console.log(minutesBefore)
-                                            console.log(lesson['description'], d)
-                                            console.log(lesson)
-                                            var name = lesson['description'] + ":" + generateId(20) //add UUID-ish thing to alarm name
-                                            chrome.alarms.create(name, {when: d.getTime()})
+                                            console.dir(lesson)
+                                            var lessonTime = new Date()  //today's date - need this for calendar events which appear as recurring events as they have the very first date as their date value
+                                            var calTime = new Date(lesson['end']['dateTime'])
+                                            lessonTime.setHours(calTime.getHours(), calTime.getMinutes(), calTime.getSeconds())
+                                            lessonTime.setMinutes(lessonTime.getMinutes() - minutesBefore)
+                                            var name = lesson['summary'] + ":" + generateId(20) //add UUID-ish thing to alarm name
+                                            chrome.alarms.create(name, {when: lessonTime.getTime()})
                                             chrome.storage.local.set({lastUpdated: Date.now()})
                                         })
                                     }
                                 })
                                 .catch(function(err){
-                                    //TODO something went wrong grabbing calendar list
+                                    //TODO something went wrong grabbing calendar data
                                 })
 
                         })

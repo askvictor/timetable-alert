@@ -92,7 +92,7 @@ function get_calendars(currentCalendar){
                     }
                 });
                 if(currentCalendar){
-                    if(currentCalendar in calIDs) {
+                    if(calIDs.includes(currentCalendar)) {
                         calSelect.value = currentCalendar
                     }
                     else{  //calendar from storage doesn't exist - delete it from storage
