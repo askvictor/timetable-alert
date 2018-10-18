@@ -180,7 +180,7 @@ function updateAlarms(){
                             }
                             let now = new Date();
                             let tomorrow = new Date();
-                            tomorrow.setHours(tomorrow.getHours() + 24)
+                            tomorrow.setHours(tomorrow.getHours() + 24, 0, 0)  // set to midnight
                             fetch('https://www.googleapis.com/calendar/v3/calendars/' + GoogleCal + '/events?timeMin=' + now.toISOString() + '&timeMax=' + tomorrow.toISOString(), init)
                                 .then((response) => response.json())
                                 .then(function (data) {

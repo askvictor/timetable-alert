@@ -1,7 +1,7 @@
 {
   "name": "Timetable Notifier (BETA)",
   "manifest_version": 2,
-  "version": "1.1.4",
+  "version": "1.1.6",
   "description": "Notifies you when class is about to end. Currently in Beta testing, so there may be bugs.",
   "background": {
     "scripts": [
@@ -12,7 +12,10 @@
     "16": "ttalert-16.png",
     "48": "ttalert-48.png",
     "128": "ttalert-128.png" },
-  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
   "browser_action": {
     "default_icon": "ttalert-16.png",
     "default_title": "Timetable Notifier",
@@ -22,8 +25,7 @@
     "notifications",
     "identity",
     "storage",
-    "alarms",
-    "https://docs.google.com/spreadsheets/"
+    "alarms"
   ],
   "web_accessible_resources": [
     "*.png"
