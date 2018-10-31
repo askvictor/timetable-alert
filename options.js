@@ -30,7 +30,6 @@ function alert(message, type, timeout=null){
 }
 
 function restore_options() {
-    // Use default value color = 'red' and likesColor = true.
     chrome.storage.sync.get({
         sheet: 'https://docs.google.com/spreadsheets/d/142DpQazVjW9rSF_AqobM0NWlelqsxsB5cHSTKovZ_8o/edit#gid=0',
         minutes: 5,
