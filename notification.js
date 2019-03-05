@@ -35,7 +35,14 @@ function lessonAlarm(alarm) {
             message: "Class ends soon",
             iconUrl: "ttalert-48.png"
         };
-        chrome.notifications.create(opt);
+        chrome.storage.local.get({"globalEnable": true}, function(result) {
+            if(result.globalEnable){
+                chrome.notifications.create(opt);
+            }else{
+                console.log("global Enable flag is false; ignoring alarm")
+            }
+
+        })
     })
 }
 
@@ -256,7 +263,7 @@ chrome.runtime.onInstalled.addListener(function(details){
         chrome.notifications.create({
             type: "basic",
             title: "Timetable Notifier",
-            message: "Extension has been updated.",
+            message: "Extension has been updated - there is now an on/off switch if don't want notifications off (e.g. you've got a day off)",
             iconUrl: "ttalert-48.png"
         })
     }
