@@ -1,7 +1,7 @@
 {
   "name": "Timetable Notifier (BETA)",
   "manifest_version": 2,
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Notifies you when class is about to end. Currently in Beta testing, so there may be bugs.",
   "background": {
     "scripts": [

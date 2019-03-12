@@ -7,7 +7,7 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <style>
     html{
-        width: 320px;
+        width: 400px;
     }
     .switch {
         font-size: 1rem;
@@ -141,19 +141,20 @@
         <input type="checkbox" class="switch" id="switch-global">
         <label for="switch-global" id="switch-global-label"></label>
       </span>
-        <!--
-      <span class="switch">
+        <br>
+      <span class="switch" id="switch-today-span">
         <input type="checkbox" class="switch" id="switch-today">
-        <label for="switch-today" id="switch-today-label">Turn off for today</label>
+        <label for="switch-today" id="switch-today-label"></label>
       </span>
-      -->
     </div>
     <div>
         <button id="settingsButton" class="btn">Settings</button>
     </div>
     <br>
+    <div>
+    <h5>Upcoming Alarms</h5>
     <div id="alarms">
-        <h5>Upcoming Alarms</h5>
+    </div>
     </div>
 </div>
 <script src="popup.js"></script>
